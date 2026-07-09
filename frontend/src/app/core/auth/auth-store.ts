@@ -21,7 +21,7 @@ const initialState: AuthState = {
 };
 
 export const AuthStore = signalStore(
-  { providedIn: 'root' },              // <-- Singleton (requisito del enunciado)
+  { providedIn: 'root' },              
   withState(initialState),
   withComputed((store) => ({
     isAuthenticated: computed(() => !!store.token()),
@@ -29,7 +29,7 @@ export const AuthStore = signalStore(
   withMethods((store, http = inject(HttpClient), router = inject(Router)) => ({
     login(username: string, password: string) {
       patchState(store, { loading: true, error: null });
-      http.post<LoginResponse>('/auth/login', { username, password }).subscribe({
+      http.post<LoginResponse>('/api/auth/login', { username, password }).subscribe({
         next: (res) => {
           localStorage.setItem('token', res.token);
           localStorage.setItem('username', res.username);
