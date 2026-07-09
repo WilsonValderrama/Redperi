@@ -5,9 +5,9 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/redperi
-    username: redperi
-    password: redperi123
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/redperi}
+    username: ${SPRING_DATASOURCE_USERNAME:redperi}
+    password: ${SPRING_DATASOURCE_PASSWORD:redperi123}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -16,5 +16,5 @@ spring:
       hibernate:
         format_sql: true
 jwt:
-  secret: "estaEsUnaClaveSecretaMuyLargaParaFirmarLosTokensJWT1234567890"
-  expiration: 3600000
+  secret: ${JWT_SECRET:estaEsUnaClaveSecretaMuyLargaParaFirmarLosTokensJWT1234567890}
+  expiration: ${JWT_EXPIRATION:3600000}

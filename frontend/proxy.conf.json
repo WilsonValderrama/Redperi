@@ -1,0 +1,5 @@
+{
+  "/auth": { "target": "http://localhost:8081", "secure": false, "changeOrigin": true },
+  "/posts": { "target": "http://localhost:8082", "secure": false, "changeOrigin": true },
+  "/ws": { "target": "http://localhost:8082", "secure": false, "ws": true, "changeOrigin": true }
+}

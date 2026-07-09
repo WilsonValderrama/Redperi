@@ -5,9 +5,9 @@ spring:
   application:
     name: posts-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/redperi
-    username: redperi
-    password: redperi123
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/redperi}
+    username: ${SPRING_DATASOURCE_USERNAME:redperi}
+    password: ${SPRING_DATASOURCE_PASSWORD:redperi123}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -17,4 +17,4 @@ spring:
         format_sql: true
 
 jwt:
-  secret: "estaEsUnaClaveSecretaMuyLargaParaFirmarLosTokensJWT1234567890"
+  secret: ${JWT_SECRET:estaEsUnaClaveSecretaMuyLargaParaFirmarLosTokensJWT1234567890}
