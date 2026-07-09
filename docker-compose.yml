@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17
+    container_name: redperi-db
+    environment:
+      POSTGRES_USER: redperi
+      POSTGRES_PASSWORD: redperi123
+      POSTGRES_DB: redperi
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
