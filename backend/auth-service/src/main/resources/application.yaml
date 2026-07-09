@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/redperi
+    username: redperi
+    password: redperi123
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+jwt:
+  secret: "estaEsUnaClaveSecretaMuyLargaParaFirmarLosTokensJWT1234567890"
+  expiration: 3600000
