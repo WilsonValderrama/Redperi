@@ -32,7 +32,7 @@ public class ProcedureRepository {
     }
 
     @Transactional
-    public Long toggleLike(Long userId, Long postId) {
+    public LikeResult toggleLike(Long userId, Long postId) {
         StoredProcedureQuery query = entityManager
                 .createStoredProcedureQuery("sp_toggle_like")
                 .registerStoredProcedureParameter("p_user_id", Long.class, ParameterMode.IN)
@@ -44,6 +44,18 @@ public class ProcedureRepository {
         query.setParameter("p_total_likes", null);
         query.execute();
 
-        return (Long) query.getOutputParameterValue("p_total_likes");
+        Long total = (Long) query.getOutputParameterValue("p_total_likes");
+
+        Long count = (Long) entityManager
+                .createNativeQuery("SELECT COUNT(*) FROM likes WHERE user_id = :uid AND post_id = :pid")
+                .setParameter("uid", userId)
+                .setParameter("pid", postId)
+                .getSingleResult();
+
+        boolean likedByMe = count != null && count > 0;
+        return new LikeResult(total, likedByMe);
     }
+
+    // record anidado, dentro de la clase
+    public record LikeResult(Long totalLikes, boolean likedByMe) {}
 }

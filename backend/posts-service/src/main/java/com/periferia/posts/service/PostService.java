@@ -43,11 +43,11 @@ public class PostService {
     }
 
     public LikeResponse toggleLike(Long userId, Long postId) {
-        Long total = procedureRepository.toggleLike(userId, postId);
-        LikeResponse response = new LikeResponse(postId, total);
+    var result = procedureRepository.toggleLike(userId, postId);
+    LikeResponse response = new LikeResponse(postId, result.totalLikes(), result.likedByMe());
 
-        // publicar el nuevo total a todos los clientes suscritos
-        messagingTemplate.convertAndSend("/topic/likes", response);
-        return response;
+    messagingTemplate.convertAndSend("/topic/likes", response);
+
+    return response;
     }
 }

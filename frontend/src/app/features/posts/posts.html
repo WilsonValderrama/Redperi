@@ -1,6 +1,50 @@
-<div style="padding: 24px;">
-  <h2>¡Bienvenido, {{ store.alias() }}! 🎉</h2>
-  <p>Login funcionando. Aquí irá el feed de publicaciones (Parte B).</p>
-  <button mat-button color="primary" routerLink="/perfil">Ver mi perfil</button>
-  <button mat-raised-button color="warn" (click)="store.logout()">Cerrar sesión</button>
+<mat-toolbar color="primary">
+  <span>Red Social</span>
+  <span style="flex: 1 1 auto;"></span>
+  <button mat-button routerLink="/perfil">
+    <mat-icon>person</mat-icon> {{ authStore.alias() }}
+  </button>
+  <button mat-button (click)="authStore.logout()">
+    <mat-icon>logout</mat-icon> Salir
+  </button>
+</mat-toolbar>
+
+<div class="feed-container">
+  <!-- Crear publicación -->
+  <mat-card class="create-card">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>¿Qué estás pensando?</mat-label>
+        <textarea matInput [(ngModel)]="nuevoMensaje" rows="2"></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="publicar()">Publicar</button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Lista de publicaciones -->
+  @if (postsStore.loading()) {
+    <p>Cargando publicaciones...</p>
+  }
+
+  @for (post of postsStore.posts(); track post.postId) {
+    <mat-card class="post-card">
+      <mat-card-header>
+        <mat-card-title>{{ post.autorAlias }}</mat-card-title>
+        <mat-card-subtitle>{{ post.fechaPublicacion | date: 'short' }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ post.mensaje }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="darLike(post.postId)">
+          <mat-icon [color]="post.likedByMe ? 'warn' : ''">
+            {{ post.likedByMe ? 'favorite' : 'favorite_border' }}
+          </mat-icon>
+          {{ post.totalLikes }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  } @empty {
+    <p>No hay publicaciones de otros usuarios aún.</p>
+  }
 </div>

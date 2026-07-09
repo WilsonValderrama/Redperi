@@ -99,7 +99,6 @@ BEGIN
     FROM posts p
     JOIN users u ON u.id = p.user_id
     LEFT JOIN likes l ON l.post_id = p.id
-    WHERE p.user_id <> p_current_user_id        -- solo publicaciones de OTROS
     GROUP BY p.id, u.id
     ORDER BY p.fecha_publicacion DESC;
 END;
