@@ -5,6 +5,7 @@ import com.periferia.posts.dto.LikeResponse;
 import com.periferia.posts.repository.PostRepository;
 import com.periferia.posts.repository.ProcedureRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.List;
 
@@ -13,11 +14,14 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final ProcedureRepository procedureRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public PostService(PostRepository postRepository,
-                       ProcedureRepository procedureRepository) {
+                       ProcedureRepository procedureRepository,
+                       SimpMessagingTemplate messagingTemplate) {
         this.postRepository = postRepository;
         this.procedureRepository = procedureRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public List<FeedItemResponse> getFeed(Long currentUserId) {
@@ -40,6 +44,10 @@ public class PostService {
 
     public LikeResponse toggleLike(Long userId, Long postId) {
         Long total = procedureRepository.toggleLike(userId, postId);
-        return new LikeResponse(postId, total);
+        LikeResponse response = new LikeResponse(postId, total);
+
+        // publicar el nuevo total a todos los clientes suscritos
+        messagingTemplate.convertAndSend("/topic/likes", response);
+        return response;
     }
 }
